@@ -1,0 +1,80 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+model Organization {
+  id          String     @id @default(uuid()) 
+  name        String     
+  locations   Location[]
+  employees   Profile[] 
+  schedules   OrganizationSchedule[]
+}
+
+// Define the Employee model
+model Profile {
+  id           String     @id @default(uuid()) 
+  firstName    String     
+  lastName     String    
+  email        String     @unique 
+  organization Organization @relation(fields: [organizationId], references: [id])
+  organizationId String 
+  shifts       Shift[]
+  role Role @default(STAFF)
+  user User @relation(fields: [userId], references: [id])
+  userId String @unique
+}
+
+// Define the User model
+model User {
+  id            String     @id @default(uuid())
+  username      String     @unique
+  passwordHash  String    
+  profile Profile?
+
+}
+
+// Define the Location model
+model Location {
+  id          String          @id @default(uuid()) 
+  name        String         
+  address     String          
+  organization Organization @relation(fields: [organizationId], references: [id])
+  organizationId String
+  shifts Shift[]
+
+}
+
+// Define the Shift model
+model Shift {
+  id          String          @id @default(uuid()) 
+  title       String       
+  status      String   
+  startTime   DateTime        
+  endTime     DateTime       
+  location    Location     @relation(fields: [locationId], references: [id])
+  locationId String    @unique
+  organization OrganizationSchedule @relation(fields: [organizationScheduleId], references: [id])
+  organizationScheduleId String @unique
+  employee  Profile @relation(fields: [profileId], references: [id])
+  profileId String
+}
+
+// Define the OrganizationSchedule model
+model OrganizationSchedule {
+  id          String          @id @default(uuid()) 
+  date        DateTime       
+  shifts      Shift[]         
+  organization Organization @relation(fields: [organizationId], references: [id])
+  organizationId String 
+}
+
+
+enum Role {
+  ADMIN
+  MANAGER
+  STAFF
+}
