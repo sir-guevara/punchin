@@ -3,6 +3,7 @@ import prisma from "../utils/prisma.utils";
 import {  genrateOtp, toTitleCase } from "../utils/utils";
 import { createUserInput } from '../dtos/User.dto';
 import {createHmac} from "crypto";
+import { sendVerificationEmail } from "./email.service";
 
 
 export async function createUserOrganizationService(params:createUserInput) {
@@ -71,8 +72,9 @@ export async  function createOtpService(medium:string, callback:Function) {
         const data =`${medium}.${otp}.${expires}`;
         const hash = createHmac("sha256",key).update(data).digest("hex");
         const fullHash = `${hash}.${expires}`
-        console.log(`Your OTP is ${otp}`)
-        // TODO send SMS or EMAIL notification
+        await sendVerificationEmail(medium,otp)
+        // TODO send SMS notification somtime
+        
         return callback(null, fullHash)
     }
 
