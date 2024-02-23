@@ -37,6 +37,7 @@ model User {
   phone        String @unique
   firstName    String    
   lastName     String  
+  isActive      Boolean @default(false)
   profile Profile?
   createdAt   DateTime      @default(now())
   updatedAt   DateTime      @updatedAt

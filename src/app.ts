@@ -9,6 +9,9 @@ import express, {
 import morgan from "morgan";
 
 import indexRoute from "./routes/index.routes";
+import organizationRoute from "./routes/organization.routes";
+import { authMiddleware } from "./middlewares/auth.midlleware";
+
 
 const app: Express = express();
 
@@ -22,6 +25,7 @@ app.use(express.urlencoded({ extended: false }));
 
 // routes
 app.use("/", indexRoute);
+app.use("/organization",authMiddleware, organizationRoute);
 
 
 
