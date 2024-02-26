@@ -1,6 +1,7 @@
 from django.contrib import admin
 
-from .models import Department, Location, Shift, Schedule, TimeClock
+from .models import Department, Location, Shift, Schedule, TimeClock, Employee,Organization
+
 
 @admin.register(Department)
 class DepartmentAdmin(admin.ModelAdmin):
@@ -14,18 +15,45 @@ class LocationAdmin(admin.ModelAdmin):
 
 @admin.register(Shift)
 class ShiftAdmin(admin.ModelAdmin):
-    list_display = ('day', 'department', 'location', 'start_time', 'end_time', 'max_employees')
-    list_filter = ('day', 'department', 'location')
-    search_fields = ('department__name', 'location__name')
+    list_display = ('__str__', 'start_time', 'end_time', 'hours','organization')
+    list_filter = ('organization', 'hours')
+    search_fields = ('start_time', 'end_time', 'organization__name')
 
-@admin.register(Schedule)
-class ScheduleAdmin(admin.ModelAdmin):
-    list_display = ('user', 'shift', 'date', 'created_at', 'updated_at')
-    list_filter = ('user', 'shift', 'date')
-    search_fields = ('user__username',)
+
 
 @admin.register(TimeClock)
 class TimeClockAdmin(admin.ModelAdmin):
-    list_display = ('user', 'shift', 'clock_in', 'clock_out', 'total_hours')
-    list_filter = ('user', 'shift')
-    search_fields = ('user__username',)
+    list_display = ('employee', 'schedule', 'clock_in', 'clock_out', 'total_hours')
+    list_filter = ('employee', 'schedule')
+    search_fields = ('employee__user__username',)
+
+class ScheduleAdmin(admin.ModelAdmin):
+    list_display = ('employee', 'shift', 'date')
+    list_filter = ('employee', 'department__organization')
+    search_fields = ('employee__user__username',)
+
+    def get_queryset(self, request):
+        qs = super().get_queryset(request)
+        return qs.select_related('employee', 'shift', 'department__organization')
+
+    def weekly_schedule(self, obj):
+        # Assuming employee's ID is stored in obj.user_id
+        weekly_schedule = Schedule.objects.get_weekly_schedule(obj.user_id, obj.date)
+        return ", ".join([str(schedule) for schedule in weekly_schedule])
+
+    def daily_schedule(self, obj):
+        # Assuming employee's ID is stored in obj.user_id
+        daily_schedule = Schedule.objects.get_daily_schedule(obj.user_id, obj.date)
+        return ", ".join([str(schedule) for schedule in daily_schedule])
+
+    weekly_schedule.short_description = "Weekly Schedule"
+    daily_schedule.short_description = "Daily Schedule"
+
+
+class OrganizationAdmin(admin.ModelAdmin):
+    list_display = ('name', 'admin')
+    search_fields = ('name', 'admin__username')
+
+admin.site.register(Employee)
+admin.site.register(Organization, OrganizationAdmin)
+admin.site.register(Schedule, ScheduleAdmin)
