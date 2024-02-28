@@ -1,0 +1,161 @@
+{% extends './main.html' %}
+{% load custom_filters %}
+{% load schedule_list %}
+{% block body %}
+
+    <div class="max-w-7xl mx-auto  shadow bg-white my-6 rounded-lg">
+        <div class="p-0">
+          <!-- Header -->
+          <div class="flex items-center justify-between mb-0 border border-b-0 p-4">
+            <div class="flex space-x-4">
+              <!-- Select field for location -->
+              <select class="form-select rounded-lg border p-1 px-4">
+                <option value="">Select Location</option>
+                <!-- Options for locations -->
+              </select>
+              <!-- Select field for position -->
+              <select class="form-select rounded-lg border p-1 px-4">
+                <option value="">Select Position</option>
+                <!-- Options for positions -->
+              </select>
+              <div class="relative px-2">
+                <div class="absolute inset-y-0 start-0 flex items-center ps-3 pointer-events-none">
+                  <svg class="w-4 h-4 text-gray-500 dark:text-gray-400" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 20 20">
+                    <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m19 19-4-4m0-7A7 7 0 1 1 1 8a7 7 0 0 1 14 0Z"/>
+                  </svg>
+                  <span class="sr-only">Search icon</span>
+                </div>
+                <input type="text" id="search-navbar" class="block w-full p-2 ps-10 text-sm text-gray-900 border border-gray-300 rounded-lg bg-gray-50 focus:ring-blue-500 focus:border-blue-500" placeholder="Search...(email or name)">
+              </div>
+            </div>
+            <select class="form-select rounded-lg border p-2 px-4 mx-2">
+                <option value="">Select Week</option>
+                <!-- Options for weeks -->
+              </select>
+              <!-- Select field for tools -->
+              <select class="form-select rounded-lg border p-2 px-4">
+                <option value="">Select Tools</option>
+                <!-- Options for tools -->
+              </select>
+            <!-- Publish button -->
+            <div class="flex gap-3 justify-center items-center" >
+                <button class=" flex rounded gap-1 mx-2" onclick="printSection('print-section')"><span data-feather="printer" ></span></button>
+
+                <button class="bg-indigo-500 hover:bg-indigo-700 text-white font-bold py-2 px-4 rounded">Publish</button>
+
+            </div>
+       
+          </div>
+          <!-- Main table -->
+          <div class="overflow-x-auto bg-white" id="print-section">
+            <table class="table-auto w-full border bg-white border-collaps">
+              <thead>
+                <tr>
+                  <th class="px-4 border  py-2 w-1/6">All Employees</th>
+                  {% for date in dates %}
+                  <th class="px-4 border py-2 leading-4 items-center justify-center text-stone-800 text-sm"><span class="font-normal">{{date | date:"D"}} </span> <br><span class="font-semibold">{{date | date:"d"}}</span></th>
+                {% endfor %}
+                </tr>
+              </thead>
+              <tbody>
+                {% for employee in organization.employees.all %}
+                <tr>
+                  <td class="border px-4 py-2 w-1/6">
+                    <div class="flex items-center justify-start">
+
+                  
+                    <div class="relative inline-flex items-center justify-center w-8 h-8 overflow-hidden bg-gray-100 rounded-full dark:bg-gray-600" style="background-color:{{employee.primary_color}}">
+                        <span class="font-medium text-gray-600 dark:text-gray-300" style='color:{{employee.secondary_color}}'> {{employee.user.get_full_name | get_initials}}
+                        </span>
+                    </div>
+                    <div class="flex flex-col items-start justify-center leading-5 whitespace-nowrap">
+                        <span class="px-2">{{employee.user.get_full_name}}</span>
+                        <span class="px-2 text-stone-400 text-xs font-semibold">42 h /$1,000</span>
+                    </div>
+                </div>
+                  </td>
+                  {% for schedule_obj in employee.id|week_schedule_list:'2024-02-26,2024-03-03' %}
+                  <td class="border px-4 py-2 relative"  ondrop="drop(event)" ondragover="allowDrop(event)"> 
+                    {% if schedule_obj.schedule %}
+                        <div class="card border-r-3 rounded p-2 px-4 whitespace-nowrap flex justify-center flex-col block items-center" style="background-color:{{employee.primary_color}}; border-left: 3px solid {{employee.secondary_color}};"  draggable="true" ondragstart="drag(event)" id="shiftId">
+                            <span class="text-xs font-bold">{{schedule_obj.schedule.shift.start_time |time:"H:i"}} - {{schedule_obj.schedule.shift.end_time |time:"H:i"}}</span>
+                                <span class="text-xs text-stone-400">at {{schedule_obj.schedule.location.name}}</span>
+                        </div>
+                        <form action="{% url 'shift_delete' %}" method="POST" onsubmit="deleteShift(event)">
+                            {% csrf_token %}
+                            <input type="hidden" name="shift_id" value="{{schedule_obj.schedule.shift.id}}">
+                        <button class=" absolute bottom-2 right-5 text-sm text-slate-400 hover:text-red-300 self-end"><span data-feather="trash" width="18"></span></button></form>
+                    {%else%}
+                    <button class=" absolute bottom-2 right-2 text-sm text-slate-300 hover:text-indigo-400 self-end" onclick="openModal(`scheduleModal_{{employee.id}}_{{schedule_obj.date |date:'d'}}`)"><span data-feather="plus-square"></span></button>
+                    {% endif %}
+                </td>
+
+
+
+
+                  <div id="scheduleModal_{{employee.id}}_{{schedule_obj.date |date:'d'}}" class="fixed z-10 inset-0 overflow-y-auto hidden">
+                    <div class="flex items-center justify-center min-h-screen">
+                        <div class="bg-white rounded-lg overflow-hidden shadow-xl">
+                            <!-- Modal Header -->
+                            <div class="bg-gray-200 py-4 px-6 flex justify-between items-center">
+                                <h2 class="text-lg text-gray-800" id="date">{{schedule_obj.date  |date:'D, M d'}}</h2>
+                                <button id="closeModal" class="text-gray-600 hover:text-gray-700 focus:outline-none" onclick="closeModal(`scheduleModal_{{employee.id}}_{{schedule_obj.date |date:'d'}}`)">
+                                    <svg class="h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+                                    </svg>
+                                </button>
+                            </div>
+                            <!-- Modal Body -->
+                            <div class="p-6">
+                                <form class="max-w-sm mx-auto" method="POST" action="{% url 'schedules' %}">
+                                    {% csrf_token %}
+                                    <input value="{{employee.id}}" name="employee" type="hidden" id="employeeId">
+                                    <input  name="date" type="hidden" value="{{schedule_obj.date |date:'Y-m-d'}}">
+                                    <div class="mb-5 grid grid-cols-2 gap-2 ">
+                                        <div class="pr-2">
+                                            <label for="start_time" class="block mb-1">Start Time</label>
+                                            <input type="time" id="start_time" name="start_time" class="form-input border p-1 rounded">
+                                        </div>
+                                      
+                                        <div class="pl-2">
+                                            <label for="end_time" class="block mb-1">End Time</label>
+                                            <input type="time" id="end_time" name="end_time" class="form-input border p-1 rounded">
+                                        </div>
+                                    </div>
+                                    <div class="mb-5">
+                                        <label for="position" class="block mb-1">Location</label>
+                                        
+                                        <select class="form-select w-full rounded-lg border p-1 px-4" name="location" id="location">
+                                            <option value="">Select Location</option>
+                                            {% for location in organization.locations.all %}
+                                                <option value="{{location.id}}">{{location.name}} </option>
+                                            {% endfor %}
+                                          </select>
+                                    </div>
+                                    <div class="mb-5">
+                                        <label for="position" class="block mb-1">Note</label>
+                                        <textarea name="note" class="form-text w-full p-1 border rounded" id=""  rows="2" maxlength="255"></textarea>
+                                    </div>
+                                    <div class="mt-6 flex gap-3 items-center justify-end mb-1">
+                        
+                                        <button class="bg-white border border-slate-200 text-slone-600 p-1.5 px-5 rounded text-sm hover:bg-slate-100" id="cancelButton" onclick="closeModal(`scheduleModal_{{employee.id}}_{{schedule_obj.date |date:'d'}}`)">Cancel</button>
+                                        <button class="bg-indigo-600 text-white p-1.5 px-5 rounded text-sm hover:bg-indigo-700" type="submit">Save Schedule</button>
+                                    </div>
+                        
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                  {% endfor %}
+                </tr>
+                {% endfor %}
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+      
+<div id="overlay" class="fixed inset-0 bg-black bg-opacity-60 hidden"></div>
+   
+{% endblock body%}

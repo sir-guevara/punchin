@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Draggable Divs in Table</title>
+<link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+</head>
+<body class="p-4">
+<div class="overflow-x-auto">
+    <table class="table-auto border-collapse border border-black">
+        <thead>
+            <tr>
+                <th class="border border-black px-4 py-2">Column 1</th>
+                <th class="border border-black px-4 py-2">Column 2</th>
+                <th class="border border-black px-4 py-2">Column 3</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td class="border border-black px-4 py-2 relative" ondrop="drop(event)" ondragover="allowDrop(event)" id="kimp">
+                    <div  id="winn" class="draggable bg-gray-300 w-24 h-12 flex justify-center items-center" draggable="true" ondragstart="drag(event)">Drag me</div>
+                </td>
+                <td class="border border-black px-4 py-2 relative" ondrop="drop(event)" ondragover="allowDrop(event)" id="div2"></td>
+                <td class="border border-black px-4 py-2 relative" ondrop="drop(event)" ondragover="allowDrop(event)"></td>
+            </tr>
+            <tr>
+                <td class="border border-black px-4 py-2 relative" ondrop="drop(event)" ondragover="allowDrop(event)" id="div3"></td>
+                <td class="border border-black px-4 py-2 relative" ondrop="drop(event)" ondragover="allowDrop(event)"></td>
+                <td class="border border-black px-4 py-2 relative" ondrop="drop(event)" ondragover="allowDrop(event)"></td>
+            </tr>
+            <tr>
+                <td class="border border-black px-4 py-2 relative" ondrop="drop(event)" ondragover="allowDrop(event)"></td>
+                <td class="border border-black px-4 py-2 relative" ondrop="drop(event)" ondragover="allowDrop(event)"></td>
+                <td class="border border-black px-4 py-2 relative" ondrop="drop(event)" ondragover="allowDrop(event)"></td>
+            </tr>
+        </tbody>
+    </table>
+</div>
+
+</body>
+</html>
