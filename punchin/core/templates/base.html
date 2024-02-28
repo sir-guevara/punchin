@@ -7,7 +7,19 @@
     <title>Punchin</title>
     {% block head %}{% endblock %}
 </head>
-<body class=" flex justify-center items-center h-screen">
+<body class="flex justify-center w-full h-screen bg-slate-100">
     {% block content %}{% endblock %}
+    <script>
+        // Get the current URL
+        var currentUrl = window.location.pathname;
+        var navLinks = document.querySelectorAll('.nav_link');
+        navLinks.forEach(function(link) {
+          var href = link.getAttribute('href');
+          console.log(href, currentUrl);
+          if (currentUrl === href) {
+            link.classList.add('text-indigo-800', 'border-indigo-600', 'font-semibold', 'border-b-4');
+          }
+        });
+      </script>
 </body>
 </html>

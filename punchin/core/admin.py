@@ -1,10 +1,10 @@
 from django.contrib import admin
 
-from .models import Department, Location, Shift, Schedule, TimeClock, Employee,Organization
+from .models import Position, Location, Shift, Schedule, TimeClock, Employee,Organization
 
 
-@admin.register(Department)
-class DepartmentAdmin(admin.ModelAdmin):
+@admin.register(Position)
+class PositionAdmin(admin.ModelAdmin):
     list_display = ('name', 'description')
     search_fields = ('name', 'description')
 
@@ -29,12 +29,12 @@ class TimeClockAdmin(admin.ModelAdmin):
 
 class ScheduleAdmin(admin.ModelAdmin):
     list_display = ('employee', 'shift', 'date')
-    list_filter = ('employee', 'department__organization')
+    list_filter = ('employee', 'employee__organization')
     search_fields = ('employee__user__username',)
 
     def get_queryset(self, request):
         qs = super().get_queryset(request)
-        return qs.select_related('employee', 'shift', 'department__organization')
+        return qs.select_related('employee', 'shift', 'employee__organization')
 
     def weekly_schedule(self, obj):
         # Assuming employee's ID is stored in obj.user_id
@@ -54,6 +54,11 @@ class OrganizationAdmin(admin.ModelAdmin):
     list_display = ('name', 'admin')
     search_fields = ('name', 'admin__username')
 
-admin.site.register(Employee)
+@admin.register(Employee)
+class EmployeeAdmin(admin.ModelAdmin):
+    list_display = ('user', 'position','organization')
+    list_filter = ('position', 'organization')
+    search_fields = ('user__username', 'position','organization')
+
 admin.site.register(Organization, OrganizationAdmin)
 admin.site.register(Schedule, ScheduleAdmin)

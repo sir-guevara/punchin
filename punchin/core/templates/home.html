@@ -1,3 +1,4 @@
+{% load 'custom_filters' %}
 {% extends 'base.html' %}
 
 {% block content %}
@@ -9,9 +10,20 @@
     </div>
     <div class="row">
         <div class="col-md-12">
-            <p>This is the home page</p>
-            <a href="{% url 'login' %}">Login</a>
-            <a href="{% url 'signup' %}">Sign up</a>
+            <p class="mb-3">This is the home page</p>
+            {% if not request.user.is_authenticated %}
+                <a href="{% url 'login' %}" class="p-2 bg-slate-900 text-white rounded mt-5 px-5">Login</a>
+                <a href="{% url 'signup' %}" class="p-2 bg-green-600 text-white rounded mt-5 px-5">Sign up</a>
+            {% else %}
+                <form class="form-inline bg-gray-200 p-3 rounded">
+                    <span class="mr-4">{{ request.user.email }}</span>
+                    <a href="/dashboard" class="p-2 bg-slate-600 text-white rounded mt-5 px-5">Dashboard</a>
+                    <form action="{% url 'logout' %}" method="post">
+                        {% csrf_token %}
+                        <button type="submit" class="p-2 bg-slate-600 text-white rounded mt-5 px-5">Logout</button>
+                    </form>
+                </form>
+            {% endif %}
         </div>
     </div>
 </div>

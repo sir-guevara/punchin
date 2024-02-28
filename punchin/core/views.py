@@ -1,9 +1,13 @@
 from django.shortcuts import render, redirect
 from django.contrib.auth import authenticate, login
+from django.contrib.auth.decorators import login_required
 from django.contrib.auth.forms import UserCreationForm
+from .models import Organization
 
 from .forms.user_create_form import CustomUserCreationForm
 
+nav_items = [{ "name":"Dashboard", "link":"" },{ "name": "Employee","link":"employees/"},{ 
+     "name":"Schedules", "link":"schedules/"}, {"name":"Time Off","link":"time-off/"},{"name":"Timesheets", "link":"timesheet"},{"name":"Reports","link":"reports"},{"name":"Messages","link":"messages/"},]
 
 def home_view(request):
     return render(request, 'home.html')
@@ -36,3 +40,23 @@ def signup_view(request):
     else:
         form = UserCreationForm()
     return render(request, 'signup.html', {'form': form})
+
+
+@login_required
+def dashboard_view(request):
+    user = request.user
+    try:
+        organization = user.admin_of
+        return render(request, 'dashboard/dashboard.html', {'organization': organization,'nav_items': nav_items})
+    except Organization.DoesNotExist:
+        return redirect('home')
+
+@login_required
+def employees_list_view(request):
+    user = request.user
+    try:
+        organization = user.admin_of
+        employees = organization.employees.all()
+        return render(request, 'dashboard/employees.html', {'organization': organization,'nav_items': nav_items,'employees': employees})
+    except Organization.DoesNotExist:
+        return redirect('home')
