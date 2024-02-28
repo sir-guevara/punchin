@@ -1,3 +1,5 @@
 .env
 venv
 request.http
+__pycache__
+migrations

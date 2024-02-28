@@ -5,17 +5,22 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <script src="https://cdn.tailwindcss.com"></script>
     <title>Punchin</title>
+    <script src="https://unpkg.com/feather-icons"></script>
+
     {% block head %}{% endblock %}
 </head>
 <body class="flex justify-center w-full h-screen bg-slate-100">
     {% block content %}{% endblock %}
+
+    <script>
+      feather.replace();
+    </script>
     <script>
         // Get the current URL
         var currentUrl = window.location.pathname;
         var navLinks = document.querySelectorAll('.nav_link');
         navLinks.forEach(function(link) {
           var href = link.getAttribute('href');
-          console.log(href, currentUrl);
           if (currentUrl === href) {
             link.classList.add('text-indigo-800', 'border-indigo-600', 'font-semibold', 'border-b-4');
           }

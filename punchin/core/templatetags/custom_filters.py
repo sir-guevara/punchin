@@ -8,5 +8,5 @@ def get_initials(value):
     initials = [words[0][0].upper()]
     if len(words) > 1:
         initials.append(words[-1][0].upper())
-    return ''.join()
+    return ''.join(initials)
 

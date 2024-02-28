@@ -1,9 +1,27 @@
-{% load 'custom_filters' %}
 {% extends './main.html' %}
+{% load custom_filters %}
+
 {% block body %}
 <div class="container rounded bg-white mt-4 shadow min-h-96">
-    <div class="header mb-5 text-center p-4">
-        <h1 class="text-sm">Employees</h1>
+    
+    <div class="header mb-5 text-center p-4 flex justify-between items-center">
+        <div>
+            <select id="small" class="block w-full p-2 text-sm text-gray-900 border border-gray-300 rounded-lg bg-gray-50 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+              <option selected>Select position</option>
+              <option value="US">HR</option>
+              <option value="CA">Manager</option>
+            </select>
+        </div>
+        <div class="relative">
+            <div class="absolute inset-y-0 start-0 flex items-center ps-3 pointer-events-none">
+              <svg class="w-4 h-4 text-gray-500 dark:text-gray-400" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 20 20">
+                <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m19 19-4-4m0-7A7 7 0 1 1 1 8a7 7 0 0 1 14 0Z"/>
+              </svg>
+              <span class="sr-only">Search icon</span>
+            </div>
+            <input type="text" id="search-navbar" class="block w-full p-2 ps-10 text-sm text-gray-900 border border-gray-300 rounded-lg bg-gray-50 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Search...">
+          </div>
+        <button href="#addEmployeeModal" class="bg-indigo-600 text-white hover:indigo-900 px-6 py-2 rounded flex justify-between"><span data-feather="plus" ></span> <span class="mx-3">Add Employee</span></button>
     </div>
     <div class="body">
         
@@ -14,7 +32,7 @@
             <tr>
                 <th scope="col" class="p-4">
                     <div class="flex items-center">
-                        <input id="checkbox-all-search" type="checkbox" class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 dark:focus:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600">
+                        <input id="checkbox-all-search" type="checkbox" class="text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 dark:focus:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600">
                         <label for="checkbox-all-search" class="sr-only">checkbox</label>
                     </div>
                 </th>
@@ -37,21 +55,22 @@
         </thead>
         <tbody>
             {% for employee in employees %}
-            <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600">
+            <tr class="bg-white border-b text-sm dark:bg-gray-800 dark:border-gray-700  dark:hover:bg-gray-600 text-stone-900">
                 <td class="w-4 p-4">
                     <div class="flex items-center">
-                        <input id="checkbox-table-search-1" type="checkbox" class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 dark:focus:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600">
+                        <input id="checkbox-table-search-1" type="checkbox" class=" text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 dark:focus:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600">
                         <label for="checkbox-table-search-1" class="sr-only">checkbox</label>
                     </div>
                 </td>
                 <td scope="row" class="px-6 py-2 font-medium text-gray-900 whitespace-nowrap dark:text-white">
-                    <div class="relative inline-flex items-center justify-center w-8 h-8 overflow-hidden bg-gray-100 rounded-full dark:bg-gray-600" style="background-color:'{{employee.primary_color}}'">
-                        <span class="font-medium text-gray-600 dark:text-gray-300" style='color:"{{employee.secondary_color}}"'>JL</span>
+                    <div class="relative inline-flex items-center justify-center w-8 h-8 overflow-hidden bg-gray-100 rounded-full dark:bg-gray-600" style="background-color:{{employee.primary_color}}">
+                        <span class="font-medium text-gray-600 dark:text-gray-300" style='color:{{employee.secondary_color}}'> {{employee.user.get_full_name | get_initials}}
+                        </span>
                     </div>
-                    {{employee.user.get_full_name}}
+                    <span class="p-2">{{employee.user.get_full_name}}</span>
                 </td>
                 <td class="px-6 py-2">
-                    {{employee.phone}}
+                    {{employee.phone_number}}
                 </td>
                 <td class="px-6 py-2">
                     {{employee.user.email}}
@@ -60,7 +79,9 @@
                     {{employee.address}}
                 </td>
                 <td class="px-6 py-2">
-                    {{employee.position}}
+                    <span class="bg-indigo-100 text-indigo-800 text-xs font-medium me-2 px-2.5 py-0.5 rounded dark:bg-indigo-700 dark:text-indigo-400 border border-indigo-500">    {{employee.position}}</span>
+
+                
                 </td>
             </tr>
             {% endfor %}
