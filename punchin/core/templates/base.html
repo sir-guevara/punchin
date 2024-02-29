@@ -87,7 +87,13 @@
               }
           }
       }
-      
+      function deleteShift(event){
+        if (!confirm('Are you sure you want to delete this shift?')) {
+          event.preventDefault(); // Block the form submission
+          this.reset();
+        }
+
+      }
   
       </script>
 </body>
