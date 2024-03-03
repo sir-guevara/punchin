@@ -107,8 +107,7 @@
                             </div>
                             <!-- Modal Body -->
                             <div class="p-6">
-                                <form class="max-w-sm mx-auto" method="POST" action="{% url 'schedules' %}">
-                                    {% csrf_token %}
+                                <form class="max-w-sm mx-auto" method="POST" action="{% url 'schedules' %}" onsubmit="saveShift(event)">
                                     <input value="{{employee.id}}" name="employee" type="hidden" id="employeeId">
                                     <input  name="date" type="hidden" value="{{schedule_obj.date |date:'Y-m-d'}}">
                                     <div class="mb-5 grid grid-cols-2 gap-2 ">
@@ -156,6 +155,5 @@
         </div>
       </div>
       
-<div id="overlay" class="fixed inset-0 bg-black bg-opacity-60 hidden"></div>
    
 {% endblock body%}

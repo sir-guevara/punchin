@@ -51,7 +51,7 @@ MIDDLEWARE = [
 ]
 
 AUTHENTICATION_BACKENDS = ['core.backend.EmailBackend']
-
+LOGIN_URL = '/login'
 ROOT_URLCONF = 'punchin.urls'
 
 TEMPLATES = [

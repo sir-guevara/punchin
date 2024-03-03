@@ -29,7 +29,7 @@ def get_organization(view_func):
             organization = user.admin_of
             kwargs['organization'] = organization
         except Organization.DoesNotExist:
-            return redirect('home')
+            return redirect('punch_in_out')
         return view_func(request, *args, **kwargs)
     return wrapper
 
@@ -40,12 +40,11 @@ def login_view(request):
     if request.method == 'POST':
         username = request.POST['username']
         password = request.POST['password']
-        print(username, password)
         user = authenticate(request, username=username, password=password)
         if user is not None:
             login(request, user)
             # Redirect to a success page
-            return redirect('home')
+            return redirect('dashboard')
         else:
             print("'invalid login' error message", user)
             return render(request, 'login.html', {'error': 'Invalid username or password.'})
@@ -138,4 +137,8 @@ def shifts_delete_view(request,organization):
         shift = get_object_or_404(Shift, pk=pk)
         shift.delete()
     return redirect('schedules')  # Redirect to a success URL after deletion
-    
+
+
+@login_required
+def punchin_view(request):
+    return render(request, 'staff/punch_in_out.html')

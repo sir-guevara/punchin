@@ -13,5 +13,6 @@ urlpatterns = [
     path('dashboard/schedules/', views.schedules_view, name='schedules'),
     path('dashboard/shifts/delete', views.shifts_delete_view, name='shift_delete'),
     path('dashboard/create-schedule/', views.create_schedule_view, name='create_schedule'),
+    path('staff/', views.punchin_view, name='punch_in_out'),
     path('logout/', auth_views.LogoutView.as_view(next_page="/"),name='logout'),
 ]
