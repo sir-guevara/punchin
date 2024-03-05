@@ -3,9 +3,65 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Punchin Dashbaord</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <title>Punchin Clock</title>
+    <script src="https://unpkg.com/feather-icons"></script>
 </head>
-<body>
+<body class="bg-slate-200">
+    <div class="container h-screen p-5">
+        {% block content %}{% endblock %}
+        
+
+<div class="fixed z-50 w-full h-16 max-w-lg -translate-x-1/2 bg-white border drop-shadow-2xl border-gray-200 bottom-0 left-1/2 dark:bg-gray-700 dark:border-gray-600 text-stone-700">
+    <div class="grid h-full max-w-lg grid-cols-3 mx-auto">
+        <button  type="button" class="inline-flex flex-col items-center justify-center px-5 rounded-s-full hover:bg-gray-50 dark:hover:bg-gray-800 group">
+            <span data-feather="calendar"></span>
+            <span class="text-xs font-semibold">My calendar</span>
+        </button>
     
+    
+        <button data-tooltip-target="tooltip-wallet" type="button" class="inline-flex flex-col items-center justify-center px-5 hover:bg-gray-50 dark:hover:bg-gray-800 group bg-indigo-600 text-white">
+          <span data-feather="clock"></span>
+            <span class="text-xs font-semibold">Punch in/out</span>
+        </button>
+        <button data-tooltip-target="tooltip-wallet" type="button" class="inline-flex flex-col items-center justify-center px-5 hover:bg-gray-50 dark:hover:bg-gray-800 group">
+            <span data-feather="file-text"></span>
+              <span class="text-xs font-semibold">Time sheet</span>
+          </button>
+    </div>
+</div>
+
+    </div>
+    <script>
+        feather.replace();
+      </script>
+      <script>
+        // Function to get the user's current address
+        function getUserAddress() {
+          // Check if geolocation is supported
+          if (navigator.geolocation) {
+            // Get the user's current position
+            navigator.geolocation.getCurrentPosition(async function(position) {
+              // Retrieve latitude and longitude
+              const latitude = position.coords.latitude;
+              const longitude = position.coords.longitude;
+      
+              // Fetch the address using reverse geocoding
+              const response = await fetch(`https://api.mapbox.com/geocoding/v5/mapbox.places/${longitude},${latitude}.json?access_token=pk.eyJ1IjoiZ3Jvb3Z5Z3VldiIsImEiOiJjamtnaW1zbTUwNHduM3BwMHN6Z2Npc2VhIn0.JcnLVCSpumv7OH8MNH3Ngw`);
+              const data = await response.json();
+      
+              // Extract and display the address
+              const address = data.features[0].place_name;
+              document.getElementById('address').innerText = address;
+            });
+          } else {
+            // Geolocation is not supported
+            document.getElementById('address').innerText = 'Geolocation is not supported by your browser.';
+          }
+        }
+      
+        // Call the function to get user's address when the page loads
+        getUserAddress();
+      </script>
 </body>
 </html>

@@ -141,4 +141,4 @@ def shifts_delete_view(request,organization):
 
 @login_required
 def punchin_view(request):
-    return render(request, 'staff/punch_in_out.html')
+    return render(request, 'staff/clock.html')

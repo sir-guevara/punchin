@@ -96,6 +96,10 @@
         }
 
       }
+
+      function setRate(event){
+        document.getElementById('overtime_hourly_rate').value = (parseFloat(event.target.value)*1.5).toFixed(2);
+      }
       
      /* function saveShift(event) {
         event.preventDefault(); // Block the form submission

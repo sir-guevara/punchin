@@ -1,0 +1,42 @@
+{% extends './staff_base.html' %}
+{% block content %}
+    <div class="container flex items-center justify-between flex-col gap-6 min-h-96 text-stone-600">
+        <div class="bg-white p-2 w-full flex gap-3 justify-between items-center rounded-md px-3">
+            <span class="font-semibold"><i data-feather="map-pin"></i> </span>
+            <p id="address" class="text-xs text-gray-600">Fetching current location...</p>
+        </div>
+    
+        <h2 class="text-center w-full font-light text-stone-900">Today. Tue Mar 5 <br> <span
+                class="text-center w-full font-semibold text-stone-700">12:40 PM</span></h2>
+    
+        <button
+            class="h-40 w-40 rounded-full bg-slate-500 font-bold text-white p-6 shadow-xl flex items-center justify-center hover:bg-slate-600 active:bg-slate-600 active:shadow-2xl">Punch
+            In </button>
+    
+            
+
+
+            <p>Punched in </p>
+
+            <div class="w-full">
+                <h2 class="text-xs mb-1 font-bold text-center w-full uppercase text-slate-600">Current Hours</h2>
+                <div class="w-full rounded-md px-3 p-2 text-center">
+                    <div class=""><span class="text-2xl font-bold"> 0 </span> <span class="text-slate-500 text-md"> H </span> <span class="text-2xl font-bold"> 10 </span> <span class="text-slate-500"> M </span></div>
+                </div>
+            </div>
+
+
+        <div class="w-full">
+            <h2 class="text-xs mb-1 font-bold text-left w-full">UPCOMING SHIFT</h2>
+            <div class="w-full bg-white rounded-md px-3 p-2">
+                <div class="w-full flex gap-3 justify-between">
+                    <span class=" text-stone-800">Tuesday 5</span> <span class="font-semibold">8 hrs</span><span
+                        class="flex gap-2 items-center justify-center text-xs"> 8:00 AM <span
+                            class="text-slate-300">to</span> 4:00 PM</span>
+                </div>
+                <p class="text-xs my-2 text-sm flex gap-2 items-center text-stone-500"><i data-feather="map-pin"
+                        class="w-3"></i>2605 5th Ave E, North Saint Paul, MN 55109 </p>
+            </div>
+        </div>
+    </div>
+{% endblock content%}
