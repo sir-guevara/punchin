@@ -74,7 +74,7 @@
                     </div>
                 </div>
                   </td>
-                  {% for schedule_obj in employee.id|week_schedule_list:'2024-02-26,2024-03-03' %}
+                  {% for schedule_obj in employee.id|week_schedule_list:dates %}
                   <td class="border px-4 py-2 relative"  ondrop="drop(event)" ondragover="allowDrop(event)"> 
                     {% if schedule_obj.schedule %}
                         <div class="card border-r-3 rounded p-2 px-4 whitespace-nowrap flex justify-center flex-col block items-center" style="background-color:{{employee.primary_color}}; border-left: 3px solid {{employee.secondary_color}};"  draggable="true" ondragstart="drag(event)" id="shiftId">

@@ -7,7 +7,7 @@
     <title>Punchin Clock</title>
     <script src="https://unpkg.com/feather-icons"></script>
 </head>
-<body class="bg-slate-200">
+<body class="bg-slate-100">
     <div class="container h-screen p-5">
         {% block content %}{% endblock %}
         
@@ -51,7 +51,64 @@
           }
         }
 
-        
+        function geolocationService(){
+          if (navigator.geolocation) {
+            navigator.geolocation.getCurrentPosition(async function(position) {
+              const currentLat = position.coords.latitude;
+              const currentLon = position.coords.longitude;
+              const latitude = document.getElementById('latitude')?.value
+              const longitude = document.getElementById('longitude')?.value
+              console.table(currentLat,currentLon,45.011070,-92.99395)
+              withinRadius(currentLat,currentLon,45.010860,-92.994150)
+            });
+
+          } else {
+            window.alert('Geolocation is not supported by your browser.');
+          }
+        }
+        geolocationService();
+
+        function distanceBetweenPoints(lat1, lon1, lat2, lon2) {
+          // Radius of the Earth in meters
+          const R = 6371000;
+      
+          // Convert latitude and longitude from degrees to radians
+          const lat1Rad = (Math.PI / 180) * lat1;
+          const lon1Rad = (Math.PI / 180) * lon1;
+          const lat2Rad = (Math.PI / 180) * lat2;
+          const lon2Rad = (Math.PI / 180) * lon2;
+      
+          // Calculate differences in latitude and longitude
+          const dLat = lat2Rad - lat1Rad;
+          const dLon = lon2Rad - lon1Rad;
+      
+          // Calculate the distance using the Haversine formula
+          const a = Math.sin(dLat / 2) * Math.sin(dLat / 2) +
+                    Math.cos(lat1Rad) * Math.cos(lat2Rad) *
+                    Math.sin(dLon / 2) * Math.sin(dLon / 2);
+          const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+          const distance = R * c;
+      
+          return distance;
+      }
+      
+      function withinRadius(currentLat, currentLon, targetLat, targetLon, radius = 10) {
+          // Calculate the distance between the current location and the target location
+          const distance = distanceBetweenPoints(currentLat, currentLon, targetLat, targetLon);
+      
+          // Check if the distance is within the specified radius
+          return   console.log("Is within 10 meters radius:", distance <= radius); 
+      }
+      
+      // Example usage:
+      const currentLat = 40.7128;  // Example latitude of current location
+      const currentLon = -74.0060;  // Example longitude of current location
+      const targetLat = 40.730610;  // Example latitude of target location
+      const targetLon = -73.935242;  // Example longitude of target location
+     // const isWithinRadius = withinRadius(currentLat, currentLon, targetLat, targetLon);
+      
+     
+
       </script>
 </body>
 </html>

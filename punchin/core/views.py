@@ -1,14 +1,16 @@
 from django.shortcuts import get_object_or_404, render, redirect
+from django.core.exceptions import ObjectDoesNotExist
 from django.contrib.auth import authenticate, login
 from django.contrib.auth.decorators import login_required
 
 from .forms.schedule_create_form import ShiftCreationForm, ScheduleCreationForm
-from .models import Organization, Schedule, Shift
+from .models import Employee, Organization, Schedule, Shift
 from .forms.employee_create_form import EmployeeCreationForm, UserCreationForm
 from .forms.user_create_form import CustomUserCreationForm
 from functools import wraps
-import random
-from datetime import datetime,timedelta
+import random,pytz
+from datetime import datetime,timedelta, date
+from django.utils import timezone
 
 
 nav_items = [{ "name":"Dashboard", "link":"" },{ "name": "Employee","link":"employees/"},{ 
@@ -131,7 +133,7 @@ def create_schedule_view(request, organization):
 
 @login_required
 @get_organization
-def shifts_delete_view(request,organization):
+def shifts_delete_view(request):
     if request.method == 'POST':
         pk = request.POST['shift_id']
         shift = get_object_or_404(Shift, pk=pk)
@@ -139,9 +141,23 @@ def shifts_delete_view(request,organization):
     return redirect('schedules')  # Redirect to a success URL after deletion
 
 
+# TODO add user shedules
 @login_required
 def punchin_view(request):
+    user = request.user
+    # formatted_today = today.strftime('%Y-%m-%d')
+    user_timezone = pytz.timezone(user.employee.organization.timezone)
+    today = timezone.localtime(timezone.now(), timezone=user_timezone).date()
+
+
+    today_schedule,future_schedule = None, None
+    future_schedule= Schedule.objects.filter(employee__user=user, date__gt=today).first()
+
+    try:
+        today_schedule = get_object_or_404(Schedule,employee__user=user, date=today)
+    except:
+        pass    
     if request.method == 'POST':
         print(request.POST)
-    return render(request, 'staff/clock.html')
+    return render(request, 'staff/clock.html',{"title":"Punch In/Out","schedule":today_schedule,"next_schedule":future_schedule, "today":today})
 

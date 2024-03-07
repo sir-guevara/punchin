@@ -7,9 +7,8 @@ register = template.Library()
 
 @register.filter
 def week_schedule_list(employee_id, date_range):
-    start_date, end_date = date_range.split(',')
-    start_date = datetime.strptime(start_date, "%Y-%m-%d")
-    end_date = datetime.strptime(end_date, "%Y-%m-%d")
+    print(date_range)
+    start_date, end_date = date_range[0],date_range[-1]
     result = []
     current_date = start_date
     while current_date <= end_date:

@@ -6,6 +6,8 @@ from django.contrib.auth.models import User
 class Organization(models.Model):
     name = models.CharField(max_length=100)
     admin = models.OneToOneField(User, on_delete=models.CASCADE, related_name='admin_of')
+    timezone = models.CharField(max_length=50, default='America/Chicago')
+
 
     def __str__(self):
         return self.name
@@ -20,7 +22,7 @@ class Position(models.Model):
         return self.name
 
 class Employee(models.Model):
-    user = models.OneToOneField(User, on_delete=models.CASCADE)
+    user = models.OneToOneField(User, on_delete=models.CASCADE, related_name='employee')
     organization = models.ForeignKey('Organization', on_delete=models.CASCADE, related_name='employees')
     avatar = models.ImageField(upload_to='employees/avatars/', blank=True, null=True)
     phone_number = models.CharField(max_length=50, blank=True)
