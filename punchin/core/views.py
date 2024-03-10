@@ -145,7 +145,8 @@ def shifts_delete_view(request):
 @login_required
 def punchin_view(request):
     user = request.user
-    formatted_today = today.strftime('%Y-%m-%d')
+    # formatted_today = today.strftime('%Y-%m-%d')
+    print(request.POST)
     user_timezone = pytz.timezone(user.employee.organization.timezone)
     today = timezone.localtime(timezone.now(), timezone=user_timezone).date()
 
