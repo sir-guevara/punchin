@@ -57,7 +57,6 @@ class Shift(models.Model):
     organization = models.ForeignKey(Organization, on_delete=models.CASCADE)
     note = models.TextField(blank=True, max_length=255, null=True)
 
-
     def save(self, *args, **kwargs):
         start_datetime = datetime.combine(datetime.today(), self.start_time)
         end_datetime = datetime.combine(datetime.today(), self.end_time)
@@ -94,7 +93,7 @@ class Schedule(models.Model):
     objects = ScheduleManager()
 
     class Meta:
-        unique_together = ('employee', 'date')
+        unique_together = ('employee', 'date','location')
 
     def __str__(self):
         return f"{self.employee} - {self.shift}"
