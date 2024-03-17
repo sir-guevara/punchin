@@ -75,16 +75,22 @@
                 </div>
                   </td>
                   {% for schedule_obj in employee.id|week_schedule_list:dates %}
-                  <td class="border px-4 py-2 relative"  ondrop="drop(event)" ondragover="allowDrop(event)"> 
+                  <td class="border px-4 py-2 relative"> 
                     {% if schedule_obj.schedule %}
-                        <div class="card border-r-3 rounded p-2 px-4 whitespace-nowrap flex justify-center flex-col block items-center" style="background-color:{{employee.primary_color}}; border-left: 3px solid {{employee.secondary_color}};"  draggable="true" ondragstart="drag(event)" id="shiftId">
+                        <div class="card border-r-3 rounded p-2 px-4 whitespace-nowrap flex justify-center flex-col block items-center" style="background-color:{{employee.primary_color}}; border-left: 3px solid {{employee.secondary_color}};" id="shiftId">
                             <span class="text-xs font-bold">{{schedule_obj.schedule.shift.start_time |time:"H:i"}} - {{schedule_obj.schedule.shift.end_time |time:"H:i"}}</span>
                                 <span class="text-xs text-stone-400">at {{schedule_obj.schedule.location.name}}</span>
                         </div>
+                        <div class="flex gap-2">
+
                         <form action="{% url 'shift_delete' %}" method="POST" onsubmit="deleteShift(event)">
                             {% csrf_token %}
                             <input type="hidden" name="shift_id" value="{{schedule_obj.schedule.shift.id}}">
-                        <button class=" absolute bottom-2 right-5 text-sm text-slate-400 hover:text-red-300 self-end"><span data-feather="trash" width="18"></span></button></form>
+                              
+                        <button class=" absolute bottom-2 right-2 text-sm text-slate-400 hover:text-red-300 self-end"><span data-feather="trash" width="18"></span></button></form>
+                        <button class=" absolute top-2 right-2 text-sm text-slate-300 hover:text-indigo-400 self-end" onclick="openModal(`scheduleModal_{{employee.id}}_{{schedule_obj.date |date:'d'}}`)"><span data-feather="plus-square" width="18"></span></button>
+                      </div>
+
                     {%else%}
                     <button class=" absolute bottom-2 right-2 text-sm text-slate-300 hover:text-indigo-400 self-end" onclick="openModal(`scheduleModal_{{employee.id}}_{{schedule_obj.date |date:'d'}}`)"><span data-feather="plus-square"></span></button>
                     {% endif %}
