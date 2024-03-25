@@ -1,3 +1,5 @@
+{% load static %}
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -5,6 +7,9 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Punchin</title>
+    <!-- <script src="https://cdn.jsdelivr.net/npm/vue@2"></script> -->
+    <script src="https://cdn.jsdelivr.net/npm/vue@2/dist/vue.js"></script>
+
     <script src="https://unpkg.com/feather-icons"></script>
   <!-- <style>
     @media print {
@@ -27,6 +32,8 @@
     <script>
       feather.replace();
     </script>
+    <script type="module" src="{% static 'js/scripts.js' %}"></script>
+
     <script>
         // Get the current URL
         var currentUrl = window.location.pathname;
@@ -40,12 +47,14 @@
 
        // Get the modal and overlay
         function openModal(el) {
+          event.preventDefault();
             var modal = document.getElementById(el);
             modal.classList.remove("hidden");
             overlay.classList.remove("hidden");
    
         }
          function closeModal(el) {
+            event.preventDefault();
             var modal = document.getElementById(el);
             modal.classList.add("hidden");
             overlay.classList.add("hidden");

@@ -14,7 +14,7 @@ from django.utils import timezone
 
 
 nav_items = [{ "name":"Dashboard", "link":"" },{ "name": "Employee","link":"employees/"},{ 
-     "name":"Schedules", "link":"schedules/"}, {"name":"Time Off","link":"time-off/"},{"name":"Timesheets", "link":"timesheet"},{"name":"Reports","link":"reports"},{"name":"Messages","link":"messages/"},]
+     "name":"Schedules", "link":"schedules/"}, {"name":"Locations","link":"locations/"},{"name":"Shifts", "link":"shifts/"},{"name":"Roles", "link":"roles/"}]
 
 
 COLORS = [{'primary_color': '#F2D7D5', 'secondary_color': '#C0392B',},{'primary_color': '#FADBD8', 'secondary_color': '#E74C3C',},{'primary_color': '#EBDEF0', 'secondary_color': '#9B59B6',},{'primary_color': '#D4E6F1', 'secondary_color': '#2980B9',},{'primary_color': '#D6EAF8', 'secondary_color': '#3498DB',},{'primary_color': '#D1F2EB', 'secondary_color': '#1ABC9C',},{'primary_color': '#D0ECE7', 'secondary_color': '#16A085',},{'primary_color': '#D4EFDF', 'secondary_color': '#27AE60',},{'primary_color': '#FCF3CF', 'secondary_color': '#F1C40F',},{'primary_color': '#FDEBD0', 'secondary_color': '#F39C12',},{'primary_color': '#FAE5D3', 'secondary_color': '#E67E22',},{'primary_color': '#F6DDCC', 'secondary_color': '#D35400',},{'primary_color': '#EAEDED', 'secondary_color': '#BDC3C7',},{'primary_color': '#E5E8E8', 'secondary_color': '#7F8C8D',},{'primary_color': '#D6DBDF', 'secondary_color': '#34495E',},{'primary_color': '#D5D8DC', 'secondary_color': '#2C3E50',},]
