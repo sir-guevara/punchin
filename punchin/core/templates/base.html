@@ -107,6 +107,13 @@
 
       }
 
+      function deleteEmployee(event){
+        if (!confirm('Are you sure you want to delete this Employee?')) {
+          event.preventDefault(); // Block the form submission
+          this.reset();
+        }
+      }
+
       function setRate(event){
         document.getElementById('overtime_hourly_rate').value = (parseFloat(event.target.value)*1.5).toFixed(2);
       }

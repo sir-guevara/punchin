@@ -100,6 +100,34 @@ def employee_view(request, organization):
 
     return redirect('employees')
 
+
+@login_required
+@get_organization
+def update_employee_view(request,organization):
+    print("Updating employee view")
+    if request.method == 'POST':
+        employee = get_object_or_404(Employee, pk=request.POST['id'])
+        user = employee.user
+        user.first_name = request.POST.get('first_name')
+        user.last_name = request.POST.get('last_name')
+        user.email = request.POST.get('email')
+        employee_form = EmployeeCreationForm(request.POST, instance=employee)
+        user.save()
+        employee_form.save()
+    return redirect('employees')  # Redirect to employee detail page or any other page
+
+
+@login_required
+@get_organization
+def delete_employee_view(request,organization):
+    if request.method == 'POST':
+        employee = get_object_or_404(Employee, pk=request.POST['id'])
+        user = employee.user
+        user.delete()
+    return redirect('employees')
+
+
+
 @login_required
 @get_organization
 def schedules_view(request, organization):

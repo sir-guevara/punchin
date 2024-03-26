@@ -3,7 +3,7 @@ new Vue({
     delimiters:['[[',']]'],
     data: {
 
-      selectedEmployee: null
+      selectedEmployee:null,
     }
     ,
     methods: {
