@@ -3,6 +3,8 @@ from django.core.exceptions import ObjectDoesNotExist
 from django.contrib.auth import authenticate, login
 from django.contrib.auth.decorators import login_required
 
+from .forms.location_create_form import LocationCreationForm
+
 from .forms.schedule_create_form import ShiftCreationForm, ScheduleCreationForm
 from .models import Employee, Organization, Schedule, Shift
 from .forms.employee_create_form import EmployeeCreationForm, UserCreationForm
@@ -125,6 +127,35 @@ def delete_employee_view(request,organization):
         user = employee.user
         user.delete()
     return redirect('employees')
+
+
+@login_required
+@get_organization
+def locations_list_view(request, organization):
+    locations = organization.locations.all()
+    return render(request, 'dashboard/locations.html', {'organization': locations,'nav_items': nav_items,'locations': locations})
+
+
+@login_required
+@get_organization
+def location(request, organization):
+    if request.method == 'POST':
+        location_form = LocationCreationForm(request.POST)
+        if location_form.is_valid():
+            location = location_form.save()
+            location.organization = organization
+            location.save()
+        
+        else:
+            print(location_form.errors) 
+    return redirect('locations')
+   
+
+@login_required
+@get_organization
+def update_location_view(request, organization):
+    locations = organization.locations.all()
+    return render(request, 'dashboard/locations.html', {'organization': locations,'nav_items': nav_items,'locations': locations})
 
 
 

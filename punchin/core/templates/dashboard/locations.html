@@ -1,0 +1,218 @@
+{% extends './main.html' %}
+
+{% block body %}
+<div id="employeeApp">
+    <div class="container rounded bg-white mt-4 shadow min-h-96">
+
+        <div class="header mb-5 text-center p-4 flex justify-between items-center">
+            <div>
+            </div>
+         
+            
+            <div class="flex gap-2" v-show="selectedEmployee">
+                <button href="#updateLocationModal" class="bg-gray-400 text-white hover:bg-slate-700 flex items-center space-x-2 px-6 py-2 rounded" id="openModal" onclick="openModal('updateLocationModal')">
+                  <span data-feather="edit"></span>
+                  <span>Edit</span>
+                </button>
+                <form action="{% url 'delete_employee' %}" method="post">
+                    {% csrf_token %}
+                    <input type="hidden" :value="selectedEmployee?.id" name="id" />
+                    <button type="submit" class="bg-gray-400 text-white hover:bg-slate-700 flex items-center space-x-2 px-6 py-2 rounded" onclick="deleteEmployee(event)">
+                    <span data-feather="trash-2"></span>
+                    <span>Delete</span>
+                    </button>
+                </form>
+              </div>
+              
+            <button href="#addLocationModal"
+                class="bg-indigo-500 text-white hover:indigo-900 px-6 py-2 rounded flex justify-between" id="openModal"
+                onclick="openModal('addLocationModal')"><span data-feather="plus"></span> <span class="mx-3">Add
+                    Location</span></button>
+        </div>
+        <div class="body">
+            <div class="relative overflow-x-auto w-full">
+                <table class="w-full text-sm text-left rtl:text-right text-gray-500" id="employeeTable">
+                    <thead class="text-xs text-gray-700 uppercase bg-gray-50">
+                        <tr>
+                            <th scope="col" class="p-4">
+                                <div class="flex items-center">
+                                   
+                                </div>
+                            </th>
+                            <th scope="col" class="px-6 py-3">
+                                Name
+                            </th>
+                            <th scope="col" class="px-6 py-3">
+                                Address
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                           {% for location in locations %}
+                        <tr class="bg-white border-b text-sm ">
+                            <td class="w-4 p-4">
+                                <div class="flex items-center">
+                                    <label for="checkbox-table-search-1" class="sr-only">checkbox</label>
+                                </div>
+                            </td>
+                            <td scope="row" class="px-6 py-2 font-medium text-gray-900 whitespace-nowrap">
+                                {{location.name}}
+                            </td>
+                            <td class="px-6 py-2">
+                                {{location.address}}
+                            </td>
+                        </tr>
+                        {% endfor %} 
+                    </tbody>
+                </table>
+            </div>
+
+        </div>
+    </div>
+
+<!-- Modal -->
+<div id="addLocationModal" class="fixed z-10 inset-0 overflow-y-auto hidden">
+    <div class="flex items-center justify-center min-h-screen">
+        <div class="bg-white rounded-lg overflow-hidden shadow-xl">
+            <!-- Modal Header -->
+            <div class="bg-gray-200 py-4 px-6 flex justify-between items-center">
+                <h2 class="text-lg text-gray-600 font-bold">Add Location</h2>
+                <button id="closeModal" onclick="closeModal('addLocationModal')"
+                    class="text-gray-600 hover:text-gray-700 focus:outline-none">
+                    <svg class="h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"
+                        xmlns="http://www.w3.org/2000/svg">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12">
+                        </path>
+                    </svg>
+                </button>
+            </div>
+            <!-- Modal Body -->
+            <div class="p-6">
+                <form class="max-w-sm mx-auto" method="POST" action="{% url 'location' %}">
+                    {% csrf_token %}
+                  
+                    <div class="flex justify-between">
+                        <div class="mb-3 w-full">
+                            <label for="address" class="block mb-2 text-sm font-medium text-gray-900 ">Name</label>
+                            <input type="text" name="name" placeholder="Name of location" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-1.5">
+                        </div>
+                    </div>
+                    <div class="flex justify-between">
+                        <div class="mb-3 w-full">
+                            <label for="address" class="block mb-2 text-sm font-medium text-gray-900 ">Address</label>
+                            <input type="text" id="addressInput" name="address" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-1.5">
+                        </div>
+                    </div>
+                    <div class="grid gap-2 grid-cols-2">
+                        <div class="mb-3">
+                            <label for="hourly_rate" class="block mb-2 text-sm font-medium text-gray-400 "> Longitude </label>
+                            <input type="number" step="0.1" name="longitude"
+                                id="longitudeInput"
+                                class="bg-gray-50 border border-gray-100 text-gray-400 text-sm rounded-lg block w-full p-1.5 disabled" readonly/>
+                        </div>
+                        <div class="mb-3 ">
+                            <label for="overtime_hourly_rate"
+                                class="block mb-2 text-sm font-medium text-gray-400 ">Latitude </label>
+                            <input type="number" step="0.1" id="latitudeInput" name="latitude"
+                                class="bg-gray-50 border border-gray-100 text-gray-400 text-sm rounded-lg block w-full p-1.5 disabled" readonly/>
+                        </div>
+                    </div>
+
+                    <div class="mt-6 flex gap-3 items-center justify-end mb-1">
+
+                        <button
+                            class="bg-white border border-slate-200 text-slone-600 p-1.5 px-5 rounded text-sm hover:bg-slate-100" onclick="closeModal('addLocationModal')">Cancel</button>
+                        <button class="bg-indigo-600 text-white p-1.5 px-5 rounded text-sm hover:bg-indigo-700"
+                            type="submit">Save Location</button>
+                    </div>
+
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<!-- Edit Employee modal -->
+<div id="updateLocationModal" class="fixed z-10 inset-0 overflow-y-auto hidden">
+    <div class="flex items-center justify-center min-h-screen">
+        <div class="bg-white rounded-lg overflow-hidden shadow-xl">
+            <!-- Modal Header -->
+            <div class="bg-gray-200 py-4 px-6 flex justify-between items-center">
+                <h2 class="text-lg text-gray-800">Update Location Details</h2>
+                <button id="closeModal" onclick="closeModal('updateLocationModal')"
+                    class="text-gray-600 hover:text-gray-700 focus:outline-none">
+                    <svg class="h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"
+                        xmlns="http://www.w3.org/2000/svg">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12">
+                        </path>
+                    </svg>
+                </button>
+            </div>
+            <!-- Modal Body -->
+            <div class="p-6">
+                <form class="max-w-sm mx-auto" method="POST" action="{% url 'update_location' %}">
+                    {% csrf_token %}
+                    
+                    <div class="flex justify-between">
+                        <div class="mb-3 w-full">
+                            <label for="address" class="block mb-2 text-sm font-medium text-gray-900 ">Name</label>
+                            <input type="text" name="name" placeholder="Name of location" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-1.5">
+                        </div>
+                    </div>
+                    <div class="flex justify-between">
+                        <div class="mb-3 w-full">
+                            <label for="address" class="block mb-2 text-sm font-medium text-gray-900 ">Address</label>
+                            <input type="text" id="addressInput" name="address" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-1.5">
+                        </div>
+                    </div>
+                    <div class="grid gap-2 grid-cols-2">
+                        <div class="mb-3">
+                            <label for="hourly_rate" class="block mb-2 text-sm font-medium text-gray-400 "> Longitude </label>
+                            <input type="longitude" 
+                                id="longitudeInput" name="longitude"
+                                class="bg-gray-50 border border-gray-100 text-gray-400 text-sm rounded-lg block w-full p-1.5 disabled" disabled />
+                        </div>
+                        <div class="mb-3 ">
+                            <label for="overtime_hourly_rate"
+                                class="block mb-2 text-sm font-medium text-gray-400 ">Latitude </label>
+                            <input type="latitude" id="latitudeInput" name="latitude"
+                                class="bg-gray-50 border border-gray-100 text-gray-400 text-sm rounded-lg block w-full p-1.5 disabled" disabled />
+                        </div>
+                    </div>
+                    <div class="mt-6 flex gap-3 items-center justify-end mb-1">
+
+                        <button
+                            class="bg-white border border-slate-200 text-slone-600 p-1.5 px-5 rounded text-sm hover:bg-slate-100"
+                            id="cancelButton" onclick="closeModal('updateLocationModal')">Cancel</button>
+                        <button class="bg-indigo-600 text-white p-1.5 px-5 rounded text-sm hover:bg-indigo-700"
+                            type="submit">Update Location</button>
+                    </div>
+
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+</div>
+
+
+<br>
+<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDMvmonFn7Qd0kkbzAZHbdm4Y7hlIJ0MGM&libraries=places"></script>
+
+<script>
+    function initializeAutocomplete() {
+        var input = document.getElementById('addressInput');
+        var autocomplete = new google.maps.places.Autocomplete(input);
+
+        autocomplete.addListener('place_changed', function() {
+            var place = autocomplete.getPlace();
+            document.getElementById('latitudeInput').value = place.geometry.location.lat();
+            document.getElementById('longitudeInput').value = place.geometry.location.lng();
+        });
+    }
+
+    google.maps.event.addDomListener(window, 'load', initializeAutocomplete);
+</script>
+
+{% endblock %}
