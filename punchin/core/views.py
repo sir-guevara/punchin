@@ -127,12 +127,13 @@ def delete_employee_view(request,organization):
         user.delete()
     return redirect('employees')
 
+# LOCATIONS
 
 @login_required
 @get_organization
 def locations_list_view(request, organization):
     locations = organization.locations.all()
-    return render(request, 'dashboard/locations.html', {'organization': locations,'nav_items': nav_items,'locations': locations})
+    return render(request, 'dashboard/locations.html', {'nav_items': nav_items,'locations': locations})
 
 
 @login_required
@@ -155,7 +156,6 @@ def update_location_view(request, organization):
     if request.method == 'POST':
         location_id = request.POST.get('id')
         location = get_object_or_404(Location, pk=location_id)
-        print(request.POST)
         location_form = LocationCreationForm(request.POST, instance=location)
         if location_form.is_valid():
             location_form.save()
@@ -163,6 +163,60 @@ def update_location_view(request, organization):
         else:
             print(location_form.errors)
     return redirect('locations')
+    
+
+@login_required
+@get_organization
+def delete_location_view(request):
+    if request.method == 'POST':
+        location_id = request.POST.get('id')
+        location = get_object_or_404(Location, pk=location_id)
+        location.delete()
+    return redirect('locations')
+
+
+
+
+
+
+# POSITIONS
+
+
+@login_required
+@get_organization
+def position_list_view(request, organization):
+    positions = organization.positions.all()
+    return render(request, 'dashboard/position.html', {'nav_items': nav_items,'positions': positions})
+
+
+@login_required
+@get_organization
+def position(request, organization):
+    if request.method == 'POST':
+        location_form = LocationCreationForm(request.POST)
+        if location_form.is_valid():
+            location = location_form.save(commit=False)
+            location.organization = organization
+            location.save()
+        else:
+            print(location_form.errors) 
+    return redirect('locations')
+   
+
+@login_required
+@get_organization
+def update_position_view(request, organization):
+    if request.method == 'POST':
+        location_id = request.POST.get('id')
+        location = get_object_or_404(Location, pk=location_id)
+        location_form = LocationCreationForm(request.POST, instance=location)
+        if location_form.is_valid():
+            location_form.save()
+            return redirect('locations')
+        else:
+            print(location_form.errors)
+    return redirect('locations')
+    
     
 @login_required
 @get_organization
@@ -172,6 +226,8 @@ def delete_location_view(request,organization):
         location = get_object_or_404(Location, pk=location_id)
         location.delete()
     return redirect('locations')
+
+
 
 @login_required
 @get_organization
