@@ -9,7 +9,20 @@ new Vue({
     methods: {
       selectEmployee: function(employee) {
         this.selectedEmployee = employee;
-        console.log(this.selectedEmployee)
+      }
+    }
+  })
+new Vue({
+    el: '#locationApp',
+    delimiters:['[[',']]'],
+    data: {
+
+      selectedLocation:null,
+    }
+    ,
+    methods: {
+      selectLocation: function(location) {
+        this.selectedLocation = location;
       }
     }
   })

@@ -6,12 +6,12 @@ from django.contrib.auth.decorators import login_required
 from .forms.location_create_form import LocationCreationForm
 
 from .forms.schedule_create_form import ShiftCreationForm, ScheduleCreationForm
-from .models import Employee, Organization, Schedule, Shift
+from .models import Employee, Location, Organization, Schedule, Shift
 from .forms.employee_create_form import EmployeeCreationForm, UserCreationForm
 from .forms.user_create_form import CustomUserCreationForm
 from functools import wraps
 import random,pytz
-from datetime import datetime,timedelta, date
+from datetime import datetime,timedelta
 from django.utils import timezone
 
 
@@ -106,7 +106,6 @@ def employee_view(request, organization):
 @login_required
 @get_organization
 def update_employee_view(request,organization):
-    print("Updating employee view")
     if request.method == 'POST':
         employee = get_object_or_404(Employee, pk=request.POST['id'])
         user = employee.user
@@ -142,10 +141,9 @@ def location(request, organization):
     if request.method == 'POST':
         location_form = LocationCreationForm(request.POST)
         if location_form.is_valid():
-            location = location_form.save()
+            location = location_form.save(commit=False)
             location.organization = organization
             location.save()
-        
         else:
             print(location_form.errors) 
     return redirect('locations')
@@ -154,10 +152,26 @@ def location(request, organization):
 @login_required
 @get_organization
 def update_location_view(request, organization):
-    locations = organization.locations.all()
-    return render(request, 'dashboard/locations.html', {'organization': locations,'nav_items': nav_items,'locations': locations})
-
-
+    if request.method == 'POST':
+        location_id = request.POST.get('id')
+        location = get_object_or_404(Location, pk=location_id)
+        print(request.POST)
+        location_form = LocationCreationForm(request.POST, instance=location)
+        if location_form.is_valid():
+            location_form.save()
+            return redirect('locations')
+        else:
+            print(location_form.errors)
+    return redirect('locations')
+    
+@login_required
+@get_organization
+def delete_location_view(request,organization):
+    if request.method == 'POST':
+        location_id = request.POST.get('id')
+        location = get_object_or_404(Location, pk=location_id)
+        location.delete()
+    return redirect('locations')
 
 @login_required
 @get_organization

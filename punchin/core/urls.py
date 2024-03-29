@@ -15,6 +15,7 @@ urlpatterns = [
     path('dashboard/locations/', views.locations_list_view, name='locations'),
     path('dashboard/add_location/', views.location, name='location'),
     path('dashboard/update_location/', views.update_location_view, name='update_location'),
+    path('dashboard/delete_location/', views.delete_location_view, name='delete_location'),
     path('dashboard/schedules/', views.schedules_view, name='schedules'),
     path('dashboard/shifts/delete', views.shifts_delete_view, name='shift_delete'),
     path('dashboard/create-schedule/', views.create_schedule_view, name='create_schedule'),
