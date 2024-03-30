@@ -186,7 +186,7 @@ def delete_location_view(request):
 @get_organization
 def position_list_view(request, organization):
     positions = organization.positions.all()
-    return render(request, 'dashboard/position.html', {'nav_items': nav_items,'positions': positions})
+    return render(request, 'dashboard/positions.html', {'nav_items': nav_items,'positions': positions})
 
 
 @login_required
