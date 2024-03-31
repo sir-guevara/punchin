@@ -2,7 +2,7 @@
 
 {% block body %}
 <div id="locationApp">
-    <div class="container rounded bg-white mt-4 shadow min-h-96">
+    <div class="container rounded bg-white mt-4 shadow min-h-96 w-full">
 
         <div class="header mb-5 text-center p-4 flex justify-between items-center">
             <div>
@@ -24,10 +24,10 @@
                 </form>
               </div>
               
-            <button href="#addLocationModal"
+            <button href="#addPositionModal"
                 class="bg-indigo-500 text-white hover:indigo-900 px-6 py-2 rounded flex justify-between" id="openModal"
-                onclick="openModal('addLocationModal')"><span data-feather="plus"></span> <span class="mx-3">Add
-                    Location</span></button>
+                onclick="openModal('addPositionModal')"><span data-feather="plus"></span> <span class="mx-3">Add
+                    Position</span></button>
         </div>
         <div class="body">
             <div class="relative overflow-x-auto w-full">
@@ -79,13 +79,13 @@
     </div>
 
 <!-- Modal -->
-<div id="addLocationModal" class="fixed z-10 inset-0 overflow-y-auto hidden">
+<div id="addPositionModal" class="fixed z-10 inset-0 overflow-y-auto hidden">
     <div class="flex items-center justify-center min-h-screen">
         <div class="bg-white rounded-lg overflow-hidden shadow-xl">
             <!-- Modal Header -->
             <div class="bg-gray-200 py-4 px-6 flex justify-between items-center">
                 <h2 class="text-lg text-gray-600 font-bold">Add Location</h2>
-                <button id="closeModal" onclick="closeModal('addLocationModal')"
+                <button id="closeModal" onclick="closeModal('addPositionModal')"
                     class="text-gray-600 hover:text-gray-700 focus:outline-none">
                     <svg class="h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"
                         xmlns="http://www.w3.org/2000/svg">
@@ -129,7 +129,7 @@
                     <div class="mt-6 flex gap-3 items-center justify-end mb-1">
 
                         <button
-                            class="bg-white border border-slate-200 text-slone-600 p-1.5 px-5 rounded text-sm hover:bg-slate-100" onclick="closeModal('addLocationModal')">Cancel</button>
+                            class="bg-white border border-slate-200 text-slone-600 p-1.5 px-5 rounded text-sm hover:bg-slate-100" onclick="closeModal('addPositionModal')">Cancel</button>
                         <button class="bg-indigo-600 text-white p-1.5 px-5 rounded text-sm hover:bg-indigo-700"
                             type="submit">Save Location</button>
                     </div>
