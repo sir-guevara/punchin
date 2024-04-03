@@ -107,7 +107,7 @@
                     </div>
                     <div class="flex justify-between">
                         <div class="mb-3 w-full">
-                            <label for="address" class="block mb-2 text-sm font-medium text-gray-900 ">Description (optional)</label>
+                            <label for="description" class="block mb-2 text-sm font-medium text-gray-600 ">Description <i>(Optional)</i></label>
                             <input type="text" id="addressInput" name="address" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-1.5" max-length="255">
                         </div>
                     </div>
@@ -157,33 +157,18 @@
                     </div>
                     <div class="flex justify-between">
                         <div class="mb-3 w-full">
-                            <label for="address" class="block mb-2 text-sm font-medium text-gray-900 ">Address</label>
+                            <label for="description" class="block mb-2 text-sm font-medium text-gray-600 ">Description <i>(Optional)</i></label>
                             <input type="text" id="editAddressInput" name="address" :value="selectedLocation?.address"  class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-1.5">
                         </div>
                     </div>
-                    <div class="grid gap-2 grid-cols-2">
-                        <div class="mb-3">
-                            <label for="hourly_rate" class="block mb-2 text-sm font-medium text-gray-400 "> Longitude </label>
-                            <input type="number" step="0.1" 
-                                :value="selectedLocation?.longitude" 
-                                id="longitudeInputd" name="longitude"
-                                class="bg-gray-50 border border-gray-100 text-gray-400 text-sm rounded-lg block w-full p-1.5 disabled" readonly />
-                        </div>
-                        <div class="mb-3 ">
-                            <label for="overtime_hourly_rate"
-                                class="block mb-2 text-sm font-medium text-gray-400 ">Latitude </label>
-                            <input type="number" step="0.1" id="latitudeInputd"               
-                                :value="selectedLocation?.latitude"  name="latitude"
-                                class="bg-gray-50 border border-gray-100 text-gray-400 text-sm rounded-lg block w-full p-1.5 disabled" readonly />
-                        </div>
-                    </div>
+      
                     <div class="mt-6 flex gap-3 items-center justify-end mb-1">
 
                         <button
                             class="bg-white border border-slate-200 text-slone-600 p-1.5 px-5 rounded text-sm hover:bg-slate-100"
                             id="cancelButton" onclick="closeModal('updateLocationModal')">Cancel</button>
                         <button class="bg-indigo-600 text-white p-1.5 px-5 rounded text-sm hover:bg-indigo-700"
-                            type="submit">Update Location</button>
+                            type="submit">Update Position</button>
                     </div>
 
                 </form>
